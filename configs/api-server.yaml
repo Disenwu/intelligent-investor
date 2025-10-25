@@ -1,0 +1,33 @@
+jwt-secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgq0iBb5
+expiration: 12h
+port: 9000
+
+database:
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: 123456
+  database: thinkamoney
+
+redis:
+  addr: 127.0.0.1:6379
+  password: ""
+  database: 0
+  pool-size: 100
+  min-idle-conns: 10
+
+log:
+  level: debug
+  format: console
+  disable-caller: true
+  disable-stacktrace: true
+  output-paths:
+    - stdout
+
+auth:
+  ignore-paths:
+    - /v1/health
+    - /v1/user/login
+    - /v1/user/register
+    - /v1/user/refresh
+    - /swagger/*
