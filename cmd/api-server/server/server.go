@@ -7,6 +7,7 @@ import (
 	"intelligent-investor/internal/app/router/v1"
 	"intelligent-investor/internal/pkg/log"
 	"intelligent-investor/internal/pkg/service"
+	"intelligent-investor/internal/pkg/token"
 	"intelligent-investor/pkg/version"
 	"time"
 
@@ -30,17 +31,17 @@ type Config struct {
 func NewServerCommand() *cobra.Command {
 	opts := options.NewServerOptions()
 	cmd := &cobra.Command{
-		Use:           "intelligent-investor",
-		Short:         "a web tool for invest to analize financial report",
-		SilenceErrors: true,
+		Use:          "intelligent-investor",
+		Short:        "a web tool for invest to analize financial report",
+		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return run(opts)
 		},
 		Args: cobra.NoArgs,
 	}
 
-	cobra.OnInitialize(onInitialize)
-	cmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "config file (default is $HOME/api-server.yaml)")
+	//cobra.OnInitialize(onInitialize)
+	cmd.PersistentFlags().StringVarP(&configFile, "config", "c", filePath(), "config file (default is $HOME/api-server.yaml)")
 	opts.AddFlags(cmd.PersistentFlags())
 	version.AddFlags(cmd.PersistentFlags())
 	return cmd
@@ -49,7 +50,10 @@ func NewServerCommand() *cobra.Command {
 func run(otps *options.ServerOptions) error {
 	version.PrintAndExitIfRequested()
 
+	onInitialize()
+
 	log.Init()
+	token.Init()
 	defer log.Sync()
 
 	if err := viper.Unmarshal(otps); err != nil {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	apiserver "intelligent-investor/cmd/api-server/options"
 	"sync"
-
+	
 	"time"
-
+	
 	"github.com/golang-jwt/jwt"
 	"github.com/spf13/viper"
 )
@@ -19,7 +19,7 @@ var (
 	once sync.Once
 )
 
-func init() {
+func Init() {
 	once.Do(func() {
 		fmt.Println("Start token config init...")
 		jwtSecret := viper.GetString("jwt-secret")
@@ -42,7 +42,7 @@ func CreateToken(username string) (string, time.Time, error) {
 		"exp":      expireAt.Unix(),
 		"iat":      time.Now().Unix(),
 	})
-
+	
 	tokenString, err := token.SignedString([]byte(opts.JWTSecret))
 	if err != nil {
 		return "", time.Time{}, err
